@@ -6,12 +6,25 @@ class PartOne
 
     def self.evaluate( input )
         string, letter, eval_string = input.split( " " )
+        
         range = rangify( string )
+        letter = letter.split( "" ).first
+        policy_check( range, letter, eval_string )
     end 
 
+    def policy_check( range, letter, eval_string ) 
+        array = eval_string.split( "" )
+        count = array.select{ |s| s == letter }.count 
+        return range.cover?( count )
+    end
+
     def rangify( string )
-        min_range, max_range = string.split( "" ).values_at( 0,-1 ).map( &:to_i )
-        range = ( min_range..max_range )
-        return range
+        min_range, max_range = string.split( "-" ).map( &:to_i )
+        return ( min_range..max_range )
     end 
+
+    def run 
+        file = load_file('policies.csv')
+    end
+
 end 
