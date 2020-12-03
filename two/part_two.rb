@@ -46,8 +46,4 @@ class PartTwo
         end
 
     end
-
-    def adjusted_point( point ) 
-        point - 1
-    end
 end
