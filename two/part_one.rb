@@ -1,5 +1,10 @@
 class PartOne
 
+    def run 
+        set = load_file( policies.csv )
+        answer = set.select{ |s| evaluate( s ) }.count 
+    end
+
     def self.load_file( path ) 
         file = CSV.read( path ).flatten
     end 
@@ -23,8 +28,5 @@ class PartOne
         return ( min_range..max_range )
     end 
 
-    def run 
-        file = load_file('policies.csv')
-    end
 
 end 
