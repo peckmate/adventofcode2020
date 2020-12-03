@@ -1,11 +1,11 @@
 class PartOne
 
     def run 
-        set = load_file( policies.csv )
+        set = load_file( 'policies.csv' )
         answer = set.select{ |s| evaluate( s ) }.count 
     end
 
-    def self.load_file( path ) 
+    def load_file( path ) 
         file = CSV.read( path ).flatten
     end 
 
