@@ -1,7 +1,16 @@
+require 'csv'
 class PartTwo 
 
     def run 
         set = load_file( 'policies.csv' )
+        arry = []
+        set.each do |x| 
+            y = evaluate x 
+            if y == :pass 
+                arry << y
+            end
+        end
+        return arry.count
     end
 
     def load_file( path ) 
@@ -10,18 +19,32 @@ class PartTwo
 
     def evaluate( input )
         number_string, letter, eval_string = input.split( " " )
+
         letter = letter.split( "" ).first
-        point_one, point_two = number_string.split("-").map &:to_i
+
+        point_one, point_two = number_string.split("-").map( &:to_i )
         split_eval = eval_string.split("") 
+        working = {} 
 
-        check_one = split_eval[ adjusted_point( point_one ) ] == letter
-        check_two = split_eval[ adjusted_point( point_two ) ] == letter 
-
-        if (check_one == true && check_two == true ) || ( check_one == false && check_two == false )
-            return :failing
-        elsif ( check_one == true && check_two == false ) || ( check_one = false && check_two == true )
-            return :passing
+        split_eval.each_with_index do |letter, idx| 
+            val = idx + 1 
+            working[val] = letter 
         end
+
+        either_number_matches = ( working[point_one] == letter ) || ( working[point_two] == letter )
+        both_numbers_match = ( working[point_one] == letter ) && ( working[point_two ] == letter )
+        neither_number_matches = ( working[point_one] != letter ) && ( working[point_two] != letter ) 
+
+        if neither_number_matches
+            return :fail
+        elsif either_number_matches
+            if both_numbers_match
+                return :fail 
+            else
+                return :pass
+            end
+        end
+
     end
 
     def adjusted_point( point ) 
