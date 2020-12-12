@@ -1,51 +1,22 @@
 # frozen_string_literal: true
 
+require_relative 'passport'
+
 ## Part One of Day For of Advent of Code
 class PartOne 
-    attr_accessor :raw_file, :working_file, :passports
 
-    #OPTIONAL = { :cid } .freeze 
-    
-    Passport = Struct.new( :eyr, :byr, :hcl, :ecl, :hgt, :iyr, :pid, :cid ) do 
-    
-        def initialize( hash ) 
-            x = *hash.values_at( *Passport.members )
-
-            passport = Passport.new( *hash.values_at( *Passport.members ) )
-        end
+    def passports
+        parsed_text.map { |x| Passport.new( x ) }
     end
 
-    def initialize( input )  
-        @working_file = []
-        @passports = []
-        #@raw_file = load_file( 'input.txt' )
-        
-
+    def initialize
+        @input = File.read('input.txt')
     end
 
-    def load_file( filepath ) 
-        File.read( filepath )
-    end
-
-    def split_raw_file_to_pretty_lines
-        raw_file.split("\n" * 2 ).map{ |x| x.gsub(/\n/, " ") }
-    end
-
-    def valid_passports
-        passports.select(&:valid?)
-    end
-
-    def run 
-        # take raw file and parse it into 'passports' 
-        array_of_strings = split_raw_file_to_pretty_lines
-
-        # prettify & parse 
-        array_of_strings.each do |string| 
-            passport = Passport.new 
-            @passports << string.split('').each do |pair|
-                k, v = pair.split(':')
-                passport[k.to_sym] = v
-            end
-        end
+    def parsed_text
+        @input.split("\n\n").map { |x| x.split("\n").join(' ') }.map { |a| a.split.map { |x| x.split(':') }.to_h }
     end
 end
+
+
+
